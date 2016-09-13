@@ -13,7 +13,7 @@ imgSelector.on("change", function () {
     pageheader.innerHTML = "Just a sec while we analyse your mood..."; //good to let your user know something is happening!
     processImage(function (file) { //this checks the extension and file
         // Get emotions based on image
-        sendEmotionRequest(file, function (emotionScores) { //here we send the API request and get the response
+        sendSearchRequest(file, function (emotionScores) { //here we send the API request and get the response
             // Find out most dominant emotion
             currentMood = getCurrMood(emotionScores);  //this is where we send out scores to find out the predominant emotion
             changeUI(); //time to update the web app, with their emotion!
@@ -93,26 +93,20 @@ function changeUI() {
 
 }
 
-function sendEmotionRequest(file, callback) {
+function sendSearchRequest(file, callback) {
     $.ajax({
-        url: "https://api.projectoxford.ai/emotion/v1.0/recognize",
+        url: "https://api.cognitive.microsoft.com/bing/v5.0/images/search",
         beforeSend: function (xhrObj) {
             // Request headers
-            xhrObj.setRequestHeader("Content-Type", "application/octet-stream");
-            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "d342c8d19d4e4aafbf64ed9f025aecc8");
+            xhrObj.setRequestHeader("Content-Type", "multipart/form-data");
+            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "6da4e4a5da49409ab75994a611f05ed8");
         },
         type: "POST",
-        data: file,
-        processData: false
+        data: "{body}",,
+        processData: true
     })
         .done(function (data) {
-            if (data.length != 0) { // if a face is detected
-                // Get the emotion scores
-                var scores = data[0].scores;
-                callback(scores);
-            } else {
-                pageheader.innerHTML = "Hmm, we can't detect a human face in that photo. Try another?";
-            }
+            alert("success");
         })
         .fail(function (error) {
             pageheader.innerHTML = "Sorry, something went wrong. :( Try again in a bit?";
