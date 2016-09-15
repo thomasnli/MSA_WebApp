@@ -1,115 +1,68 @@
-/**
- * Created by nizza_000 on 13/09/2016.
- */
-// Get jquery objects from DOM
-var pageheader = $("#page-header")[0]; //note the [0], jQuery returns an object, so to get the html DOM object we need the first item in the object
-var pagecontainer = $("#page-container")[0];
-var imgSelector = $("#my-file-selector"); //You dont have to use [0], however this just means whenever you use the object you need to refer to it with [0].
-var refreshbtn = $("#refreshbtn");
-//Note: changing them all to [0] may prevent some errors when using functions linked to that variable.
+var cityName;
+$(document).ready(function() {
 
-// Register event listeners
-imgSelector.on("change", function () {
-    pageheader.innerHTML = "Just a sec while we analyse your mood..."; //good to let your user know something is happening!
-    processImage(function (file) { //this checks the extension and file
-        // Get emotions based on image
-        sendSearchRequest(file, function (emotionScores) { //here we send the API request and get the response
-            // Find out most dominant emotion
-            currentMood = getCurrMood(emotionScores);  //this is where we send out scores to find out the predominant emotion
-            changeUI(); //time to update the web app, with their emotion!
 
-            //Done!!
-        });
+
+    $("#searchbtn").on("click", function () {
+        var cName=readSearchForm();
+        var url=sendPicRequest(cName);
+        changeImg(url);
+
+
+
     });
-});
 
-refreshbtn.on("click", function () {
-    // Load random song based on mood
-    alert("You clicked the button"); //can demo with sweetAlert plugin
-});
 
-function processImage(callback) {
-    var file = imgSelector.get(0).files[0]; //get(0) is required as imgSelector is a jQuery object so to get the DOM object, its the first item in the object. files[0] refers to the location of the photo we just chose.
-    var reader = new FileReader();
-    if (file) {
-        reader.readAsDataURL(file); //used to read the contents of the file
+    function readSearchForm() {
+        //cityName=$("#search-form").val("value");
+        cityName=document.getElementById("search-form").value;
+        return cityName;
     }
-    else {
-        console.log("Invalid file");
-    }
-    reader.onloadend = function () {
-        //After loading the file it checks if extension is jpg or png and if it isnt it lets the user know.
-        if (!file.name.match(/\.(jpg|jpeg|png)$/)) {
-            pageheader.innerHTML = "Please upload an image file (jpg or png).";
-        }
-        else {
-            //if file is photo it sends the file reference back up
-            callback(file);
-        }
-    };
-};
 
-var Mood = (function () {       //Creating a Mood object which has the mood as a string and its corresponding emoji
-    function Mood(mood, emojiurl) {
-        this.mood = mood;
-        this.emojiurl = emojiurl;
-        this.name = mood;
-        this.emoji = emojiurl;
-    }
-    return Mood;
-}());
 
-var happy = new Mood("happy", "http://emojipedia-us.s3.amazonaws.com/cache/a0/38/a038e6d3f342253c5ea3c057fe37b41f.png");
-var sad = new Mood("sad", "https://cdn.shopify.com/s/files/1/1061/1924/files/Sad_Face_Emoji.png?9898922749706957214");
-var angry = new Mood("angry", "https://cdn.shopify.com/s/files/1/1061/1924/files/Very_Angry_Emoji.png?9898922749706957214");
-var neutral = new Mood("neutral", "https://cdn.shopify.com/s/files/1/1061/1924/files/Neutral_Face_Emoji.png?9898922749706957214");
+    function sendPicRequest(cName) {
+        // var count=1; var
 
-function getCurrMood(scores) {
-    var currentMood;
-    // In a practical sense, you would find the max emotion out of all the emotions provided. However we'll do the below just for simplicity's sake :P
-    if (scores.happiness > 0.4) {
-        currentMood = happy;
-    }
-    else if (scores.sadness > 0.4) {
-        currentMood = sad;
-    }
-    else if (scores.anger > 0.4) {
-        currentMood = angry;
-    }
-    else {
-        currentMood = neutral;
-    }
-    return currentMood;
-}
+        var parms={"q":cName, "count":1};
+        var testVar=$.param(parms);
+        $.ajax({
+            //url: "https://api.cognitive.microsoft.com/bing/v5.0/images/search?q=wellington&count=1"
+            url: "https://api.cognitive.microsoft.com/bing/v5.0/images/search?" + $.param(parms),
+            beforeSend: function (xhrObj) {
+                // Request headers
+                xhrObj.setRequestHeader("Content-Type", "multipart/form-data");
+                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "6da4e4a5da49409ab75994a611f05ed8");
+            },
+            type: "POST",
+            data: {"q":cName, "count":1}
 
-// Manipulate the DOM
-function changeUI() {
-    //Show detected mood
-    pageheader.innerHTML = "Your mood is: " + currentMood.name;  //Remember currentMood is a Mood object, which has a name and emoji linked to it.
-    //Show mood emoji
-    var img = document.getElementById("selected-img"); //getting a predefined area on our webpage to show the emoji
-    img.src = currentMood.emoji; //link that area to the emoji of our currentMood.
-    img.style.display = "inline"; //just some formating of the emoji's location
 
-}
-
-function sendSearchRequest(file, callback) {
-    $.ajax({
-        url: "https://api.cognitive.microsoft.com/bing/v5.0/images/search",
-        beforeSend: function (xhrObj) {
-            // Request headers
-            xhrObj.setRequestHeader("Content-Type", "multipart/form-data");
-            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "6da4e4a5da49409ab75994a611f05ed8");
-        },
-        type: "POST",
-        data: "{body}",,
-        processData: true
-    })
-        .done(function (data) {
-            alert("success");
         })
-        .fail(function (error) {
-            pageheader.innerHTML = "Sorry, something went wrong. :( Try again in a bit?";
-            console.log(error.getAllResponseHeaders());
-        });
-}
+            .done(function (data) {
+                if (data.length != 0) { // if data is received
+                    // Get the picture
+                    var contentUrl = data.value[0].contentUrl;
+                    callback(contentUrl);
+                } else {
+                    pageheader.innerHTML = "It seems we can't get there. Try another city?";
+                }
+            })
+            .fail(function (error) {
+                pageheader.innerHTML = "Sorry, something went wrong. :( Try again in a bit?";
+                console.log(error.getAllResponseHeaders());
+            });
+
+
+    }
+
+
+
+    function changeImg(url) {
+        //var picture=value.contentUrl;
+        $("html").css('background-image', 'url(url)');
+        //document.getElementById("body").style.backgroundImage="url(url)";
+    }
+});
+
+
+

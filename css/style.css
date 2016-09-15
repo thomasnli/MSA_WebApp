@@ -1,5 +1,6 @@
+
 html {
-    background: url("http://theme.dima-lab.com/okab/images/landing-page-iphone/blurred-home-bg.jpg") no-repeat center center fixed;
+    background: url("bg1copy.jpg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -9,39 +10,43 @@ html {
 body {
     color: white;
     background-color: transparent;
+    text-align: left;
+    font-family: "Arial", sans-serif;
 }
 
 h1#app-name {
-    font-size:84px;
+    margin-top: 120px;
+    margin-bottom: 5px;
+    font-size: 80px;
 }
 
-button#refreshbtn {
-    display:none;
+button#searchbtn {
+    background: #3498db;
+    border-radius: 28px;
+    font-family: Arial;
+    color: white;
+    font-size: 15px;
+    padding: 5px 10px 5px 10px;
+    border: 3px;
+    box-shadow: 0px 2px 3px #666666;
 }
 
-img#selected-img{
-    width:150px;
-    height:150px;
-    padding:20px;
-    display:none;
-    margin: 0 auto;
-}
-
-h2#page-header {
-    padding-top:20px;
-    padding-bottom:20px;
+h2#app-slogan {
+    margin-top: 0px;
+    padding-top: 0px;
+    padding-bottom: 20px;
+    font-size: 20px;
 }
 
 body #page-container {
     margin-top: 150px;
-    text-align: center;
     margin-bottom: 40px;
+    margin-left: 25px;
 }
 
-.btn-wrapper {
-    padding: 20px 0;
-}
-
-input#my-file-selector {
-    display:none;
+input#search-form {
+    width: 18%;
+    margin-bottom: 15px;
+    font-size: 20px;
+    color:grey;
 }
