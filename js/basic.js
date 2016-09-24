@@ -3,33 +3,45 @@ function myFunction() {
     //var cName="hongkong";
     var params = {
         "q": cName,
-        "subscription-key": "6da4e4a5da49409ab75994a611f05ed8"
+        "subscription-key": "6da4e4a5da49409ab75994a611f05ed8",
+        "count":"1"
     };
 
     $.ajax({
-        url: "https://api.cognitive.microsoft.com/bing/v5.0/images/search?" + $.param(params),
+        url: "https://api.cognitive.microsoft.com/bing/v5.0/images/search?"+$.param(params),
         beforeSend: function (xhrObj) {
             // Request headers
-            //xhrObj.setRequestHeader("Content-Type","application/json; charset=utf-8");
+            xhrObj.setRequestHeader("Content-Type","application/json; charset=utf-8");
             xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "6da4e4a5da49409ab75994a611f05ed8");
-            xhrObj.getResponseHeader("Access-Control-Allow-Origin:*");
+            //xhrObj.getResponseHeader("Access-Control-Allow-Origin:*");
         },
-        type: "GET",
+        type: "POST",
+        //data: {q: cName,"subscription-key": "6da4e4a5da49409ab75994a611f05ed8"},
+        //     subscription-key: 6da4e4a5da49409ab75994a611f05ed8,
+        //   count:1},
+        processData: true
+
         // Request body
         // data: "{body}"
     })
         .done(function (data) {
-            if (data.length != 0) { // if data is received
-                // Get the picture
-                var contentUrl = data.value[0].contentUrl;
-                $("html").css('background-image', 'url(contentUrl)');
+            //console.log("success");
+            //alert("success123");
+            //if (data.length != 0) { // if data is received
+            // Get the picture
+            var ctUrl = data.value[0].contentUrl;
+            //alert(ctUrl);
+            //document.getElementById("body").style.backgroundImage="url("contentUrl")";
+            //var ct=""http://content.bookyourgolf.net/Images/Region/1/229-849.jpg""
+            $("html").css("background-image", "url('"+ctUrl+"')");
 
-                callback(contentUrl);
-            } else {
-                pageheader.innerHTML = "It seems we can't get there. Try another city?";
-            }
+            //   callback(contentUrl);
+            //} else {
+            //    pageheader.innerHTML = "It seems we can't get there. Try another city?";
+            // }  http://www.marktanner.com/art/wellington-large.jpg
         })
         .fail(function () {
+            console.log("fail");
             alert("error");
         });
 }
