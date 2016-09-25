@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cityful</title>
+    <!--Boostrap's CSS-->
+    <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <!--Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <script src="./FB.js"></script>
+</head>
+
+<body id="body">
+
+<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+</fb:login-button>
+
+<div id="status"></div>
+<div class="container" id="page-container">
+
+    <h1 id="app-name">
+        Cityful
+    </h1>
+    <h2 id="app-slogan">
+        To see the beautiful city.
+    </h2>
+    <br>
+        <label for="search-form"></label>
+        <input type="text" id="search-form" value=""/>
+    <button type="submit" id="searchbtn" onclick="myFunction()"> GO & CHECK!</button>
+        <p id="demo"></p >
+    </div>
+
+<!--jQuery Script-->
+<script src="./node_modules/jquery/dist/jquery.min.js"></script>
+<!--Bootstrap Script-->
+<script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<!--Custom Script-->
+<script src="./basicLogic.js"></script>
+
+
+</body>
+
+</html>
