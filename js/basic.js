@@ -42,7 +42,7 @@ function myFunction() {
         })
         .fail(function () {
             console.log("fail");
-            alert("error");
+            alert("errorJ");
         });
 }
 FB.ui({
