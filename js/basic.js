@@ -3,19 +3,19 @@ function myFunction() {
     //var cName="hongkong";
     var params = {
         "q": cName,
-        "subscription-key": "6da4e4a5da49409ab75994a611f05ed8",
+        "subscription-key": "d42e179206f54aacadb02556105f5b81",
         "count":"1"
     };
 
     $.ajax({
-        url: "https://api.cognitive.microsoft.com/bing/v5.0/images/search?"+$.param(params),
+        url: "https://api.cognitive.microsoft.com/bing/v7.0/images/search?"+$.param(params),
         beforeSend: function (xhrObj) {
             // Request headers
             xhrObj.setRequestHeader("Content-Type","application/json; charset=utf-8");
-            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "6da4e4a5da49409ab75994a611f05ed8");
+            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "d42e179206f54aacadb02556105f5b81");
             //xhrObj.getResponseHeader("Access-Control-Allow-Origin:*");
         },
-        type: "POST",
+        type: "GET",
         //data: {q: cName,"subscription-key": "6da4e4a5da49409ab75994a611f05ed8"},
         //     subscription-key: 6da4e4a5da49409ab75994a611f05ed8,
         //   count:1},
