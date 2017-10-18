@@ -2,16 +2,16 @@ function myFunction() {
     var cName = document.getElementById("search-form").value;
     var params = {
         "q": cName,
-        "subscription-key": "6da4e4a5da49409ab75994a611f05ed8",
+        "subscription-key": "d42e179206f54aacadb02556105f5b81",
         "count": "1"
     };
     $.ajax({
-        url: "https://api.cognitive.microsoft.com/bing/v5.0/images/search?" + $.param(params),
+        url: "https://api.cognitive.microsoft.com/bing/v7.0/images/search?" + $.param(params),
         beforeSend: function (xhrObj) {
             xhrObj.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "6da4e4a5da49409ab75994a611f05ed8");
+            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "d42e179206f54aacadb02556105f5b81");
         },
-        type: "POST",
+        type: "GET",
         processData: true
     })
         .done(function (data) {
@@ -20,6 +20,6 @@ function myFunction() {
     })
         .fail(function () {
         console.log("fail");
-        alert("error");
+        alert("errorJBL2");
     });
 }
